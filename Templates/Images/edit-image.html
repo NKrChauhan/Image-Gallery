@@ -6,5 +6,22 @@
 Image Gallery
 {% endblock %}
 {% block content %}
-
+{% if img_obj == "not found" %}
+<center style="margin-top: 20%;"><div class="container"><strong>404</strong></div><div class="container"><p>Image not found</p></div></center>
+{% else %}
+<center>
+    <div class="container" style="margin-top:15px;">
+        <img src="{{img_obj.get_absolute_image}}" class="img-fluid" alt="image" style="height:500px">
+        <hr>
+        <div class="row container">
+            <div class="col-md-6 ">
+                <a href="" class="btn btn-primary">rotate anti-clock</a>
+            </div>
+            <div class="col-md-6">
+                <a href="{% url 'images:clockRotation' img_obj.id %}" class="btn btn-primary">rotate clock</a>
+            </div>
+        </div>
+    </div>
+</center>
+{% endif %}
 {% endblock %}

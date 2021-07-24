@@ -1,8 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from .models import Images
 from django.views.generic import ListView, CreateView
 from taggit.models import Tag
 import os
+from PIL import Image
 
 # Create your views here.
 
@@ -34,5 +35,27 @@ class UploadImage(CreateView):
     model = Images
 
 
-def EditImage(request, *args, **kwargs):
-    pass
+def rotate_image_colockwise(request, id, *args, **kwargs):
+    object = Images.objects.filter(id=id)
+    data = {
+        'img_obj': "not found",
+    }
+    if object:
+        object = object.first()
+        image = Image.open(object.image.path)
+        r_image = image.rotate(90)
+        object.image = r_image
+        object.save(commit=True)
+    return redirect(EditImage, id=id)
+
+
+def EditImage(request, id, *args, **kwargs):
+    object = Images.objects.filter(id=id)
+    data = {
+        'img_obj': "not found",
+    }
+    if object:
+        data = {
+            'img_obj': object.first(),
+        }
+    return render(request=request, template_name='Images/edit-image.html', context=data)
