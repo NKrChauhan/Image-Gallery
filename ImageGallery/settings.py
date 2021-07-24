@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'taggit',
+    'Images',
 ]
 
 MIDDLEWARE = [
@@ -120,8 +122,20 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    path.join(BASE_DIR, 'static'),
+]
+STATIC_ROOT = path.join(path.dirname(BASE_DIR), 'static_cdn')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Tagit settings for case sensitivity
+TAGGIT_CASE_INSENSITIVE = False
+
+# Media Setup
+
+MEDIA_ROOT = path.join(path.dirname(BASE_DIR), 'Media')
+MEDIA_URL = '/media/'
