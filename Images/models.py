@@ -27,5 +27,11 @@ class Images(models.Model):
     image = models.ImageField(
         upload_to=upload_image_path)
 
+    class Meta:
+        ordering = ['id']
+    
+    def __str__(self):
+        return self.id
+        
     def get_absolute_image(self):
         return os.path.join('/media', self.image.name)

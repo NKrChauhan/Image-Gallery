@@ -15,7 +15,7 @@ Image Gallery
         <hr>
         <div class="row container">
             <div class="col-md-6 ">
-                <a href="" class="btn btn-primary">rotate anti-clock</a>
+                <a href="{% url 'images:anticlockRotation' img_obj.id %}" class="btn btn-primary">rotate anti-clock</a>
             </div>
             <div class="col-md-6">
                 <a href="{% url 'images:clockRotation' img_obj.id %}" class="btn btn-primary">rotate clock</a>

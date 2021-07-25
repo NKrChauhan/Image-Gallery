@@ -25,29 +25,41 @@ class TagView(TagsMixin, ListView):
 
 
 class HomeView(TagsMixin, ListView):
-    model = Images
     template_name = 'Images/home.html'
-    queryset = Images.objects.all()
-    context_object_name = 'images'
+    paginate_by = 8
 
+    def get(self, request, *args, **kwargs):
+        self.object = Images.objects.all()
+        return super().get(request, *args, **kwargs)
 
-class UploadImage(CreateView):
-    model = Images
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['images'] = Images.objects.all()
+        return context
+    
+    def get_queryset(self):
+        return self.object.all()
+
+def UploadImage(request):
+    pass
+    return render(request,'Images/add-image.html',{})
 
 
 def rotate_image_colockwise(request, id, *args, **kwargs):
     object = Images.objects.filter(id=id)
-    data = {
-        'img_obj': "not found",
-    }
     if object:
         object = object.first()
         image = Image.open(object.image.path)
-        r_image = image.rotate(90)
-        object.image = r_image
-        object.save(commit=True)
-    return redirect(EditImage, id=id)
+        image.rotate(270,expand=True).save(object.image.path)
+    return redirect('images:edit', id=id)
 
+def rotate_image_anticolockwise(request, id, *args, **kwargs):
+    object = Images.objects.filter(id=id)
+    if object:
+        object = object.first()
+        image = Image.open(object.image.path)
+        image.rotate(90,expand=True).save(object.image.path)
+    return redirect('images:edit', id=id)
 
 def EditImage(request, id, *args, **kwargs):
     object = Images.objects.filter(id=id)

@@ -9,16 +9,35 @@ Image Gallery
 <div class="container-fluid" style="padding-top: 5px;margin-top: 5%;margin-bottom: 15px;"><a href="{% url 'images:home' %}" class="btn btn-success btn-sm" style="border-radius:50%;">all</a>{% for tag in tags %} <a href="{% url 'images:images_by_tags' tag.slug %}" class="btn btn-success btn-sm" style="border-radius:50%;">{{ tag }}</a> {% endfor %}</div>
 <center><a href="{% url 'images:upload' %}"><i class="fas fa-plus-circle fa-5x"></i></a><br></center>
 <div class="container-fluid jumbotron" style="padding-top: 10px;margin-top: 15px;">
-    {% for image in images %}
-        <div class="col-md-4 no-gutters bg-light position-relative" style="height:350px" >
-            <a href="{% url 'images:edit' id=image.id %}"><img src={{image.get_absolute_image}} alt="image" class="img-fluid" style="width:400px;"></a>
-            <hr/>
-            <div>
-                {% for tag in image.tags.all %}
-                <a href="{% url 'images:images_by_tags' tag.slug %}" class="btn btn-primary btn-sm" style="border-radius:50%;">{{ tag.name }}</a>
-                {% endfor %}
+    <div class="row">
+        {% for image in object_list %}
+            <div class="col-md-4 no-gutters bg-light position-relative" style="height:350px" >
+                <a href="{% url 'images:edit' id=image.id %}"><img src={{image.get_absolute_image}} alt="image" class="img-fluid" style="height:200px;"></a>
+                <hr/>
+                <div>
+                    {% for tag in image.tags.all %}
+                    <a href="{% url 'images:images_by_tags' tag.slug %}" class="btn btn-primary btn-sm" style="border-radius:50%;">{{ tag.name }}</a>
+                    {% endfor %}
+                </div>
             </div>
-        </div>
-    {% endfor %}
+        {% endfor %}
+    </div>
+    <center>
+        {% if images|length !=  0 %}
+            {% if is_paginated %}
+                <ul class="pagination">
+                    {% if page_obj.has_previous %}
+                    <li><a href="?page={{page_obj.previous_page_number}}"><<</a></li>
+                    {% endif %}
+                    <li><a >Page</a></li>
+                    {% if page_obj.has_next %}
+                    <li><a href="?page={{page_obj.next_page_number}}">>></a></li>
+                    {% endif %}
+                </ul>
+            {% endif %}
+        {% else %}
+            <a href="{% url 'images:home' %}" class="btn btn-danger">Home page</a>
+        {% endif %}
+    </center> 
 </div>
 {% endblock %}
