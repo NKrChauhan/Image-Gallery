@@ -31,7 +31,7 @@ class Images(models.Model):
         ordering = ['id']
     
     def __str__(self):
-        return self.id
-        
+        return str(self.id)
+
     def get_absolute_image(self):
         return os.path.join('/media', self.image.name)

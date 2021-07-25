@@ -1,8 +1,9 @@
+from django.forms import forms
 from django.shortcuts import redirect, render
 from .models import Images
-from django.views.generic import ListView, CreateView
+from django.views.generic import ListView
 from taggit.models import Tag
-import os
+from .forms import UploadImage
 from PIL import Image
 
 # Create your views here.
@@ -41,7 +42,16 @@ class HomeView(TagsMixin, ListView):
         return self.object.all()
 
 def UploadImage(request):
-    pass
+    if(request.method == 'POST'):
+        images = request.FILES.getlist('images')
+        tags = request.POST.get('tags').split(',')
+        objects=[]
+        for tag in tags:
+            Tag.objects.get_or_create(name=tag)
+        for image in images:
+            objects.append(Images.objects.create(image=image))
+        for instance in objects:
+            instance.tags.add(*tags)
     return render(request,'Images/add-image.html',{})
 
 
